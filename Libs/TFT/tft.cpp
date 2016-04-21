@@ -116,6 +116,35 @@ void TFT::FillRect(int x, int y, int xl, int yl)
 	sbi(P_CS, B_CS);
 }
 
+void TFT::DrawLine(int x, int y, int x2, int y2)
+{
+	int dx, dy, cx, cy, sx, sy,	ox, oy,steps;
+
+	ox = 0;
+	oy = 0;
+
+	dx = (x > x2) ? x - x2 : x2 - x;
+	dy = (y > y2) ? y - y2 : y2 - y;
+
+	steps = (dx >= dy) ? dx : dy; // >=
+
+	sx = (dx!=0) ? ((x2-x) * 100 / steps) : 0;
+	sy = (dy!=0) ? ((y2-y) * 100 / steps) : 0;
+
+	DrawPixel(x, y);
+
+	while(steps--)
+	{
+		ox += sx;
+		oy += sy;
+
+		cx = x + ox / 100;
+		cy = y + oy / 100;
+
+		DrawPixel(cx, cy);
+	}
+}
+
 void TFT::DrawHorizontalLine(int x, int y, int l)
 {
 	if (l<0)

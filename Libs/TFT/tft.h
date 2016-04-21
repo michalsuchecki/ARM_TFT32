@@ -67,6 +67,7 @@ public:
 	void DrawRect(int x, int y, int xl, int yl);
 	void FillRect(int x, int y, int xl, int yl);
 
+	void DrawLine(int x, int y, int x2, int y2);
 	void DrawHorizontalLine(int x, int y, int l);
 	void DrawVerticalLine(int x, int y, int l);
 

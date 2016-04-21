@@ -12,6 +12,8 @@ void setup()
 	display.FillRect(0,20,50,50);
 	display.SetColor(255,0,0);
 	display.DrawRect(100,100,100,20);
+	display.SetColor(0,0,255);
+	display.DrawLine(0,0,320,240);
 }
 
 void loop()
