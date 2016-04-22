@@ -19,8 +19,6 @@
 							<builder buildPath="${workspace_loc:/ARD_Test}/Release" id="it.baeyens.arduino.sketch.builder.2136908740" keepEnvironmentInBuildfile="false" managedBuildOn="true" name="Arduino sketch builder" superClass="it.baeyens.arduino.sketch.builder"/>
 							<tool id="it.baeyens.arduino.tool.sketch.compiler.cpp.1755883123" name="Arduino C++ Compiler" superClass="it.baeyens.arduino.tool.sketch.compiler.cpp">
 								<option id="it.baeyens.arduino.compiler.cpp.sketch.option.incpath.790676586" name="Include Paths (-I)" superClass="it.baeyens.arduino.compiler.cpp.sketch.option.incpath" valueType="includePath">
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/ARD_Test/core/core}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/ARD_Test/core/variant}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/ARM_TFT/core/core}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/ARM_TFT/core/variant}&quot;"/>
 								</option>
@@ -28,8 +26,6 @@
 							</tool>
 							<tool id="it.baeyens.arduino.tool.compiler.c.832815511" name="Arduino C Compiler" superClass="it.baeyens.arduino.tool.compiler.c">
 								<option id="it.baeyens.arduino.compiler.c.sketch.option.incpath.1742907856" name="Include Paths (-I)" superClass="it.baeyens.arduino.compiler.c.sketch.option.incpath" valueType="includePath">
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/ARD_Test/core/core}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/ARD_Test/core/variant}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/ARM_TFT/core/core}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/ARM_TFT/core/variant}&quot;"/>
 								</option>

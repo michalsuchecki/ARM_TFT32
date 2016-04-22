@@ -6,11 +6,17 @@
 // Rozdzielczosc
 #define RESX 320
 #define RESY 240
-
+/*
 #define RS 38
 #define WR 39
 #define CS 40
 #define RST 41
+*/
+
+#define RS 22
+#define WR 23
+#define CS 31
+#define RST 33
 
 // -----------------------------
 
@@ -30,8 +36,13 @@
 
 #define swap(type, i, j) {type t = i; i = j; j = t;}
 
+
 #define regtype volatile uint32_t
 #define regsize uint32_t
+
+
+//#define regtype volatile uint8_t
+//#define regsize uint8_t
 
 // Colors
 
