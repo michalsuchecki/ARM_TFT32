@@ -105,6 +105,11 @@ void TFT::SetPixel(word color)
 	LCD_Write_DATA((color>>8),(color&0xFF));
 }
 
+void TFT::SetPixel(uint8_t ph, uint8_t pl)
+{
+	LCD_Write_DATA(ph,pl);
+}
+
 void TFT::DrawRect(int x, int y, int xl, int yl)
 {
 	DrawHorizontalLine(x,y,xl);
@@ -249,6 +254,68 @@ int TFT::GetDisplayXSize()
 int TFT::GetDisplayYSize()
 {
 	return RESY;
+}
+
+// Font
+void TFT::PrintChar(char c, int x, int y)
+{
+	cbi(P_CS, B_CS);
+
+	uint16_t temp, j, i, ch, zz8 ,f8;
+	uint16_t xo, yo;
+
+	f8 = Font.x_size/8;
+
+	temp=((c-Font.offset)*(f8*Font.y_size))+4;
+	for(j=0;j<Font.y_size;j++)
+	{
+		for (int zz=0; zz<f8; zz++)
+		{
+			zz8 = zz*8;
+			ch=pgm_read_byte(&Font.font[temp+zz]);
+			for(i=0;i<8;i++)
+			{
+				if((ch&(1<<(7-i)))!=0)
+				{
+					xo = x + i + zz8;
+					yo = y + j;
+					SetXY(xo,yo,xo+1,yo+1);
+					SetPixel(fch,fcl);
+				}
+			}
+		}
+		temp+=f8;
+	}
+
+	sbi(P_CS, B_CS);
+	ClearXY();
+}
+
+void TFT::PrintText(char* string, int x, int y)
+{
+	int str_len = strlen(string);
+
+	for (int i=0; i<str_len; i++)
+		PrintChar(*string++, x + (i*(Font.x_size)), y);
+}
+
+void TFT::SetFont(const byte* newFont)
+{
+	Font.font = newFont;
+	Font.x_size = newFont[0];
+	Font.y_size = newFont[1];
+	Font.offset = newFont[2];
+	Font.numchars = newFont[3];
+}
+
+uint8_t TFT::GetFontSizeX()
+{
+	return Font.x_size;
+}
+
+uint8_t TFT::GetFontSizeY()
+{
+	return Font.y_size;
 }
 
 // Private Methods

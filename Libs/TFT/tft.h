@@ -1,67 +1,7 @@
 #ifndef LIBS_TFT_TFT_H_
 #define LIBS_TFT_TFT_H_
 
-#include "Arduino.h"
-
-// Rozdzielczosc
-#define RESX 320
-#define RESY 240
-
-//#define ARDUINO_MEGA_SHIELD
-#define EHOUSE_SHIELD
-#define ARM
-
-// -----------------------------
-
-#ifdef EHOUSE_SHIELD
-	#ifdef ARDUINO_MEGA_SHIELD
-	#undef ARDUINO_MEGA_SHIELD
-	#endif
-#endif
-
-#ifdef ARDUINO_MEGA_SHIELD
-	#ifdef EHOUSE_SHIELD
-	#undef EHOUSE_SHIELD
-	#endif
-#endif
-
-#ifdef ARDUINO_MEGA_SHIELD
-	#define RS 38
-	#define WR 39
-	#define CS 40
-	#define RST 41
-#endif
-
-#ifdef EHOUSE_SHIELD
-	#define RS 22
-	#define WR 23
-	#define CS 31
-	#define RST 33
-#endif
-
-#define LEFT 0
-#define RIGHT 9999
-#define CENTER 9998
-
-#define RX (RESX-1)
-#define RY (RESY-1)
-#define SCREEN_SIZE (RESX*RESY)
-
-#define cbi(reg, bitmask) *reg &= ~bitmask
-#define sbi(reg, bitmask) *reg |= bitmask
-
-#define pulse_high(reg, bitmask) sbi(reg, bitmask); cbi(reg, bitmask);
-#define pulse_low(reg, bitmask) cbi(reg, bitmask); sbi(reg, bitmask);
-
-#define swap(type, i, j) {type t = i; i = j; j = t;}
-
-#ifdef ARM
-	#define regtype volatile uint32_t
-	#define regsize uint32_t
-#else
-	#define regtype volatile uint8_t
-	#define regsize uint8_t
-#endif
+#include "common.h"
 
 // Colors
 
@@ -83,7 +23,18 @@
 #define VGA_PURPLE		0x8010
 #define VGA_TRANSPARENT	0xFFFFFFFF
 
-// Class
+// STRUCT
+
+struct sfont
+{
+	const byte* font;
+	uint8_t x_size;
+	uint8_t y_size;
+	uint8_t offset;
+	uint8_t numchars;
+};
+
+// CLASS
 
 class TFT
 {
@@ -93,6 +44,7 @@ public:
 public:
 	void DrawPixel(int x, int y);
 	void SetPixel(word color);
+	void SetPixel(uint8_t ph, uint8_t pl);
 
 	void DrawRect(int x, int y, int xl, int yl);
 	void FillRect(int x, int y, int xl, int yl);
@@ -113,6 +65,13 @@ public:
 
 	int	GetDisplayXSize();
 	int	GetDisplayYSize();
+
+	// Font
+	void PrintText(char* string, int x=0, int y=0);
+	void PrintChar(char c, int x=0, int y=0);
+	void SetFont(const byte* newFont);
+	uint8_t GetFontSizeX();
+	uint8_t GetFontSizeY();
 private:
 	void SetDirectionRegisters();
 	void FastFill16(int ch, int cl, long pix);
@@ -124,6 +83,7 @@ private:
 	void LCD_Write_COM_DATA(char com,char DH, char DL);
 	void LCD_Write_COM_DATA(char com,int dat);
 private:
+	sfont Font;
 	regtype	*P_RS, *P_WR, *P_CS, *P_RST;
 	regsize	B_RS, B_WR, B_CS, B_RST;
 	byte fch, fcl, bch, bcl;
