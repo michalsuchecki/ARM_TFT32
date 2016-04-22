@@ -19,9 +19,11 @@ TFT::TFT()
 
 void TFT::Init(void)
 {
+#ifdef EHOUSE_SHIELD
 	// EHOUSE SHIELD - Set the TFT_RD pin permanently HIGH
 	pinMode(24, OUTPUT);
 	digitalWrite(24, HIGH);
+#endif
 
 	pinMode(RS, OUTPUT);
 	pinMode(WR, OUTPUT);
@@ -253,21 +255,25 @@ int TFT::GetDisplayYSize()
 
 void TFT::SetDirectionRegisters()
 {
+#ifdef EHOUSE_SHIELD
 	REG_PIOC_OER=0x000FF3FC;
 	REG_PIOC_OWER=0x000FF3FC;
-	/*
+#endif
+#ifdef ARDUINO_MEGA_SHIELD
 	REG_PIOA_OER=0x0000c000; //PA14,PA15 enable
 	REG_PIOB_OER=0x04000000; //PB26 enable
 	REG_PIOD_OER=0x0000064f; //PD0-3,PD6,PD9-10 enable
 	REG_PIOA_OER=0x00000080; //PA7 enable
 	REG_PIOC_OER=0x0000003e; //PC1 - PC5 enable
-	*/
+#endif
 }
 void TFT::FastFill16(int ch, int cl, long pix)
 {
 	long blocks;
-
-	/*
+#ifdef EHOUSE_SHIELD
+	PIOC->PIO_ODSR = ((PIOC->PIO_ODSR&(~0x000FF3FC)) | ((((uint32_t)cl)<<2) | (((uint32_t)ch)<<12)));
+#endif
+#ifdef ARDUINO_MEGA_SHIELD
 	REG_PIOA_CODR=0x0000C080;
 	REG_PIOC_CODR=0x0000003E;
 	REG_PIOD_CODR=0x0000064F;
@@ -275,9 +281,7 @@ void TFT::FastFill16(int ch, int cl, long pix)
 	(ch & 0x01) ? REG_PIOB_SODR = 0x4000000 : REG_PIOB_CODR = 0x4000000;
 	REG_PIOC_SODR=((cl & 0x01)<<5) | ((cl & 0x02)<<3) | ((cl & 0x04)<<1) | ((cl & 0x08)>>1) | ((cl & 0x10)>>3);
 	REG_PIOD_SODR=((ch & 0x78)>>3) | ((ch & 0x80)>>1) | ((cl & 0x20)<<5) | ((cl & 0x80)<<2);
-*/
-	PIOC->PIO_ODSR = ((PIOC->PIO_ODSR&(~0x000FF3FC)) | ((((uint32_t)cl)<<2) | (((uint32_t)ch)<<12)));
-
+#endif
 	blocks = pix/16;
 	for (int i=0; i<blocks; i++)
 	{
@@ -339,9 +343,10 @@ void TFT::LCD_Write_COM_DATA(char com,int dat)
 
 void TFT::LCD_Write_BUS(char VH,char VL)
 {
+#ifdef EHOUSE_SHIELD
 	PIOC->PIO_ODSR = ((PIOC->PIO_ODSR&(~0x000FF3FC)) | ((((uint32_t)VL)<<2) | (((uint32_t)VH)<<12)));
-	pulse_low(P_WR, B_WR);
-	/*
+#endif
+#ifdef ARDUINO_MEGA_SHIELD
 	REG_PIOA_CODR=0x0000C080;
 	REG_PIOC_CODR=0x0000003E;
 	REG_PIOD_CODR=0x0000064F;
@@ -349,6 +354,6 @@ void TFT::LCD_Write_BUS(char VH,char VL)
 	(VH & 0x01) ? REG_PIOB_SODR = 0x4000000 : REG_PIOB_CODR = 0x4000000;
 	REG_PIOC_SODR=((VL & 0x01)<<5) | ((VL & 0x02)<<3) | ((VL & 0x04)<<1) | ((VL & 0x08)>>1) | ((VL & 0x10)>>3);
 	REG_PIOD_SODR=((VH & 0x78)>>3) | ((VH & 0x80)>>1) | ((VL & 0x20)<<5) | ((VL & 0x80)<<2);
+#endif
 	pulse_low(P_WR, B_WR);
-	*/
 }

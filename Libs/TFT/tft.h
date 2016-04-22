@@ -6,19 +6,38 @@
 // Rozdzielczosc
 #define RESX 320
 #define RESY 240
-/*
-#define RS 38
-#define WR 39
-#define CS 40
-#define RST 41
-*/
 
-#define RS 22
-#define WR 23
-#define CS 31
-#define RST 33
+//#define ARDUINO_MEGA_SHIELD
+#define EHOUSE_SHIELD
+#define ARM
 
 // -----------------------------
+
+#ifdef EHOUSE_SHIELD
+	#ifdef ARDUINO_MEGA_SHIELD
+	#undef ARDUINO_MEGA_SHIELD
+	#endif
+#endif
+
+#ifdef ARDUINO_MEGA_SHIELD
+	#ifdef EHOUSE_SHIELD
+	#undef EHOUSE_SHIELD
+	#endif
+#endif
+
+#ifdef ARDUINO_MEGA_SHIELD
+	#define RS 38
+	#define WR 39
+	#define CS 40
+	#define RST 41
+#endif
+
+#ifdef EHOUSE_SHIELD
+	#define RS 22
+	#define WR 23
+	#define CS 31
+	#define RST 33
+#endif
 
 #define LEFT 0
 #define RIGHT 9999
@@ -36,13 +55,13 @@
 
 #define swap(type, i, j) {type t = i; i = j; j = t;}
 
-
-#define regtype volatile uint32_t
-#define regsize uint32_t
-
-
-//#define regtype volatile uint8_t
-//#define regsize uint8_t
+#ifdef ARM
+	#define regtype volatile uint32_t
+	#define regsize uint32_t
+#else
+	#define regtype volatile uint8_t
+	#define regsize uint8_t
+#endif
 
 // Colors
 
@@ -97,7 +116,7 @@ public:
 private:
 	void SetDirectionRegisters();
 	void FastFill16(int ch, int cl, long pix);
-
+	// Commands
 	void LCD_Write_COM(char VL);
 	void LCD_Write_BUS(char VH,char VL);
 	void LCD_Write_DATA(char VL);
