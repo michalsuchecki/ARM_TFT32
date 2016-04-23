@@ -257,46 +257,97 @@ int TFT::GetDisplayYSize()
 }
 
 // Font
-void TFT::PrintChar(char c, int x, int y)
+void TFT::PrintChar(char c, int x, int y, bool transparent)
 {
 	cbi(P_CS, B_CS);
 
 	uint16_t temp, j, i, ch, zz8 ,f8;
-	uint16_t xo, yo;
+	uint16_t xo, yo, jdev;
 
 	f8 = Font.x_size/8;
 
-	temp=((c-Font.offset)*(f8*Font.y_size))+4;
-	for(j=0;j<Font.y_size;j++)
+	if(transparent)
 	{
-		for (int zz=0; zz<f8; zz++)
+		temp=((c-Font.offset)*(f8*Font.y_size))+4;
+		for(j=0;j<Font.y_size;j++)
 		{
-			zz8 = zz*8;
-			ch=pgm_read_byte(&Font.font[temp+zz]);
-			for(i=0;i<8;i++)
+			for (int zz=0; zz<f8; zz++)
 			{
-				if((ch&(1<<(7-i)))!=0)
+				zz8 = zz*8;
+				ch=pgm_read_byte(&Font.font[temp+zz]);
+				for(i=0;i<8;i++)
 				{
-					xo = x + i + zz8;
-					yo = y + j;
-					SetXY(xo,yo,xo+1,yo+1);
-					SetPixel(fch,fcl);
+					if((ch&(1<<(7-i)))!=0)
+					{
+						xo = x + i + zz8;
+						yo = y + j;
+						SetXY(xo,yo,xo+1,yo+1);
+						SetPixel(fch,fcl);
+					}
 				}
 			}
+			temp+=f8;
 		}
-		temp+=f8;
+	}
+	else
+	{
+		temp=((c-Font.offset)*(f8*Font.y_size))+4;
+
+		for(j=0;j<(f8*Font.y_size);j+=(f8))
+		{
+			SetXY(x,y+(j/(f8)),x+Font.x_size-1,y+(j/(f8)));
+			for (int zz=(f8)-1; zz>=0; zz--)
+			{
+				ch=pgm_read_byte(&Font.font[temp+zz]);
+				for(i=0;i<8;i++)
+				{
+					if((ch&(1<<i))!=0)
+					{
+						SetPixel(fch,fcl);
+					}
+					else
+					{
+						SetPixel(bch,bcl);
+					}
+				}
+			}
+			temp+=(f8);
+		}
+		/*
+		for(j=0;j<(f8*Font.y_size);j+=f8)
+		{
+			jdev = y + (j/f8);
+			SetXY(x,jdev,x+Font.x_size-1,jdev);
+			for (int zz=(f8)-1; zz>=0; zz--)
+			{
+				ch=pgm_read_byte(&Font.font[temp+zz]);
+				for(i=0;i<8;i++)
+				{
+					if((ch&(1<<i))!=0)
+					{
+						SetPixel((fch<<8)|fcl);
+					}
+					else
+					{
+						SetPixel((bch<<8)|bcl);
+					}
+				}
+			}
+			temp+=f8;
+		}
+		*/
 	}
 
 	sbi(P_CS, B_CS);
 	ClearXY();
 }
 
-void TFT::PrintText(char* string, int x, int y)
+void TFT::PrintText(char* string, int x, int y, bool transparent)
 {
 	int str_len = strlen(string);
 
 	for (int i=0; i<str_len; i++)
-		PrintChar(*string++, x + (i*(Font.x_size)), y);
+		PrintChar(*string++, x + (i*(Font.x_size)), y, transparent);
 }
 
 void TFT::SetFont(const byte* newFont)

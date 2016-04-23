@@ -67,8 +67,8 @@ public:
 	int	GetDisplayYSize();
 
 	// Font
-	void PrintText(char* string, int x=0, int y=0);
-	void PrintChar(char c, int x=0, int y=0);
+	void PrintText(char* string, int x=0, int y=0, bool transparent = true);
+	void PrintChar(char c, int x=0, int y=0, bool transparent = true);
 	void SetFont(const byte* newFont);
 	uint8_t GetFontSizeX();
 	uint8_t GetFontSizeY();
