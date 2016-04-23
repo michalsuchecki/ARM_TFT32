@@ -4,7 +4,18 @@
 
 TFT Display = TFT();
 UI Interface = UI(&Display);
+Touch touch = Touch();
 
+bool test = false;
+
+void Debug(word value, int x, int y)
+{
+	char msg[32];
+	itoa(value,msg,10);
+	Display.SetColor(VGA_YELLOW);
+	Display.PrintText(msg,x,y);
+
+}
 
 void setup()
 {
@@ -37,5 +48,14 @@ void setup()
 
 void loop()
 {
+    if (touch.ProcessTouch())
+    {
+    	if(!test)
+    	{
+    	Debug(touch.GetX(),10,80);
+    	Debug(touch.GetY(),10,90);
+    	test=true;
+    	}
+    }
 	Interface.Draw();
 }
