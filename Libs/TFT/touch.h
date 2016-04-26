@@ -3,9 +3,11 @@
 
 #include "common.h"
 
-#define CAL_X 0x00378F66UL
-#define CAL_Y 0x03C34155UL
-#define CAL_S 0x000EF13FUL
+/*
+#define CAL_X 0x00378F66
+#define CAL_Y 0x03C34155
+#define CAL_S 0x000EF13F
+*/
 
 #define T_CLK 25
 #define T_CS 26
@@ -13,21 +15,33 @@
 #define T_DOUT 29
 #define T_IRQ 30
 
+enum TouchState{
+	T_Touched,
+	//T_Moving,
+	T_Realesed
+};
+
 class Touch{
 public:
 	Touch();
 	bool ProcessTouch();
 	word GetX();
 	word GetY();
-private:
+	TouchState GetState();
 	bool DataAvailable();
+private:
 	void DataRead();
 	void DeviceWrite(byte data);
 	word DeviceRead();
 private:
 	word x,y;
+	uint8_t step_x, step_y;
+	//uint16_t start_x, start_y;
+	uint16_t min_x, min_y, max_x, max_y;
 	regtype *P_CLK, *P_CS, *P_DIN, *P_DOUT, *P_IRQ;
 	regsize B_CLK, B_CS, B_DIN, B_DOUT, B_IRQ;
+	TouchState State;
+
 };
 
 #endif

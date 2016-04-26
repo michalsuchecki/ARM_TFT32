@@ -7,16 +7,29 @@ Touch touch = Touch();
 
 bool test = false;
 
-void Debug(char* info, word value, int x, int y)
+void OnTouch(int x, int y, TouchState State, char* Tag)
+{
+
+}
+
+void Debug(char* info,  word value, int x, int y)
 {
 	int str_len = strlen(info);
 	char msg[64];
 	itoa(value,msg,10);
 	Display.SetColor(VGA_YELLOW);
 	Display.PrintText(info,x,y,false);
-	Display.PrintText("    ",x + str_len * 10,y, false);
+	Display.PrintText("      ",x + str_len * 10,y, false);
 	Display.PrintText(msg,x + str_len * 10,y, false);
+}
 
+void Debug(char* info,  char* value, int x, int y)
+{
+	int str_len = strlen(info);
+	Display.SetColor(VGA_YELLOW);
+	Display.PrintText(info,x,y,false);
+	Display.PrintText("        ",x + str_len * 10,y, false);
+	Display.PrintText(value,x + str_len * 10,y, false);
 }
 
 void setup()
@@ -57,11 +70,25 @@ void loop()
     {
     	if(!test)
     	{
-    	Debug("X:",touch.GetX(),10,80);
-    	Debug("Y:",touch.GetY(),10,90);
-    	//test=true;
-    	//Serial.println(touch.GetY());
+
     	}
     }
+
+	Debug("X:",touch.GetX(),10,80);
+	Debug("Y:",touch.GetY(),10,90);
+
+	switch(touch.GetState())
+	{
+	case T_Touched:
+		Debug("Touched:", "Touched",10,100);
+		break;
+	//case T_Moving:
+	//	Debug("Touched:", "Moving",10,100);
+	//	break;
+	case T_Realesed:
+		Debug("Touched:", "Released",10,100);
+		break;
+	}
+
 	Interface.Draw();
 }
