@@ -4,8 +4,9 @@ Touch::Touch()
 {
 	x = 0;
 	y = 0;
+	delta = 0;
 
-	State = T_Realesed;
+	State = T_Untouched;
 
 	P_CLK	= portOutputRegister(digitalPinToPort(T_CLK));
 	B_CLK	= digitalPinToBitMask(T_CLK);
@@ -28,27 +29,6 @@ Touch::Touch()
 	sbi(P_CLK, B_CLK);
 	sbi(P_DIN, B_DIN);
 	sbi(P_IRQ, B_IRQ);
-
-	/*
-	orient					= orientation;
-	_default_orientation	= CAL_S>>31;
-
-	#define CAL_X 0x00378F66
-
-	touch_x_left			= (CAL_X>>14) & 0x3FFF;	// 222
-
-	touch_x_right			= CAL_X & 0x3FFF; // 3942
-
-	#define CAL_Y 0x03C34155
-
-	touch_y_top				= (CAL_Y>>14) & 0x3FFF;	//3853
-
-	touch_y_bottom			= CAL_Y & 0x3FFF; // 341
-
-	disp_x_size				= (CAL_S>>12) & 0x0FFF; //239
-	disp_y_size				= CAL_S & 0x0FFF; // 319
-	prec					= 10;
-	 */
 
 	min_x = 222;
 	max_x = 3942;
@@ -85,44 +65,73 @@ word Touch::GetY()
 	return y;
 }
 
-bool Touch::ProcessTouch()
+bool Touch::ProcessTouch(uint16_t delta_time)
 {
-	if(DataAvailable())
+	delta += delta_time;
+	if(delta < PROCESS_TIME)
 	{
-		DataRead();
-
-		if(State == T_Realesed)
-		{
-			State = T_Touched;
-			//start_x = GetX();
-			//start_y = GetY();
-			//x = start_x;
-			//y = start_y;
-		}
-
-
-/*
-		if(State != T_Moving)
-		{
-			// TODO: Add tolerance
-
-#define TOLERANCE 5
-
-			if((start_x <= (x - TOLERANCE) && start_x >= (x + TOLERANCE))
-			|| (start_y <= (y - TOLERANCE) && start_y >= (y + TOLERANCE)))
-				State = T_Moving;
-
-			//if(start_x != x || start_y != y)
-				//State = T_Moving;
-		}
-*/
-
-		return true;
+		return false;
 	}
 	else
 	{
-		State = T_Realesed;
-		return false;
+		delta -= PROCESS_TIME;
+		if(DataAvailable())
+		{
+			DataRead();
+
+			if(State == T_Untouched)
+			{
+				State = T_Touched;
+
+				if(OnTouch != NULL)
+					OnTouch(GetX(), GetY(), State);
+
+				//start_x = GetX();
+				//start_y = GetY();
+				//x = start_x;
+				//y = start_y;
+			}
+
+
+	/*
+			if(State != T_Moving)
+			{
+				// TODO: Add tolerance
+
+	#define TOLERANCE 5
+
+				if((start_x <= (x - TOLERANCE) && start_x >= (x + TOLERANCE))
+				|| (start_y <= (y - TOLERANCE) && start_y >= (y + TOLERANCE)))
+					State = T_Moving;
+
+				//if(start_x != x || start_y != y)
+					//State = T_Moving;
+			}
+	*/
+
+			return true;
+		}
+		else
+		{
+			if(State == T_Touched)
+			{
+				State = T_Released;
+				if(OnTouch != NULL)
+					OnTouch(GetX(), GetY(), State);
+				return false;
+			}
+
+			if(State == T_Released)
+			{
+				State = T_Untouched;
+				if(OnTouch != NULL)
+					OnTouch(GetX(), GetY(), State);
+
+			}
+			return false;
+		}
+
+
 	}
 
 }

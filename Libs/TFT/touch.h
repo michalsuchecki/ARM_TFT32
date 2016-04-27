@@ -3,32 +3,38 @@
 
 #include "common.h"
 
-/*
-#define CAL_X 0x00378F66
-#define CAL_Y 0x03C34155
-#define CAL_S 0x000EF13F
-*/
+// czêstotliwosc z jaka aktualizujemy dane np 25/sek
+#define REFRESH_RATE 10
 
+// Piny
 #define T_CLK 25
 #define T_CS 26
 #define T_DIN 27
 #define T_DOUT 29
 #define T_IRQ 30
 
-enum TouchState{
-	T_Touched,
-	//T_Moving,
-	T_Realesed
+//--------------------------------------------------------
+
+#define PROCESS_TIME (1000/REFRESH_RATE)
+
+enum TouchState
+{
+	T_Untouched,	// Gdy nie dotykamy paluchem
+	T_Touched,		// Gdy przytrzymujemy paluch na ekranie
+	//T_Moving,		// Gdy przeci¹gamy paluch po ekranie [TODO]
+	T_Released		// Gdy puœcimy paluch
 };
 
-class Touch{
+class Touch
+{
 public:
 	Touch();
-	bool ProcessTouch();
+	bool ProcessTouch(uint16_t delta_time);
 	word GetX();
 	word GetY();
 	TouchState GetState();
 	bool DataAvailable();
+	void (*OnTouch)(int x, int y, TouchState state);
 private:
 	void DataRead();
 	void DeviceWrite(byte data);
@@ -41,43 +47,7 @@ private:
 	regtype *P_CLK, *P_CS, *P_DIN, *P_DOUT, *P_IRQ;
 	regsize B_CLK, B_CS, B_DIN, B_DOUT, B_IRQ;
 	TouchState State;
-
+	uint16_t delta;
 };
 
 #endif
-
-/*
-void UTouch::touch_WriteData(byte data)
-{
-	byte temp;
-
-	temp=data;
-	cbi(P_CLK, B_CLK);
-
-	for(byte count=0; count<8; count++)
-	{
-		if(temp & 0x80)
-			digitalWrite(T_DIN, HIGH);
-		else
-			digitalWrite(T_DIN, LOW);
-		temp = temp << 1;
-		digitalWrite(T_CLK, LOW);
-		digitalWrite(T_CLK, HIGH);
-	}
-}
-
-word UTouch::touch_ReadData()
-{
-	word data = 0;
-
-	for(byte count=0; count<12; count++)
-	{
-		data <<= 1;
-		digitalWrite(T_CLK, HIGH);
-		digitalWrite(T_CLK, LOW);
-		if (digitalRead(T_DOUT))
-			data++;
-	}
-	return(data);
-}
-*/
