@@ -2,6 +2,8 @@
 
 MAX31855::MAX31855()
 {
+	ThermocoupleTemp = 0;
+
 	pinMode(SCK, OUTPUT);
 	pinMode(CS, OUTPUT);
 	pinMode(SO, INPUT);
@@ -35,7 +37,7 @@ double MAX31855::ReadCelsiusTemp()
 
 	// Error
 	if(_data & 0x07)
-		return 0;
+		return ThermocoupleTemp;
 
 	// Negative
 	if(_data & 0x80000000)
@@ -47,11 +49,11 @@ double MAX31855::ReadCelsiusTemp()
 		_data = _data >> 18;
 	}
 
-	double _result = _data;
+	ThermocoupleTemp = _data;
 
-	_result *= 0.25;
+	ThermocoupleTemp *= 0.25;
 
-	return _result;
+	return ThermocoupleTemp;
 }
 
 uint32_t MAX31855::ReadData()

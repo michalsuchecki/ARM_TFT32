@@ -34,6 +34,7 @@ public:
 	double ReadCelsiusTemp();
 private:
 	uint32_t ReadData();
+	double ThermocoupleTemp;
 };
 
 #endif
