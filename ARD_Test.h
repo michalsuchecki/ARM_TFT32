@@ -7,5 +7,6 @@
 #include "Libs/TFT/tft.h"
 #include "Libs/TFT/ui.h"
 #include "Libs/TFT/touch.h"
+#include "Libs/MAX31855/MAX31855.h"
 
 #endif

@@ -256,6 +256,28 @@ int TFT::GetDisplayYSize()
 	return RESY;
 }
 
+word TFT::RGBtoWORD(uint8_t r, uint8_t g, uint8_t b)
+{
+	return ((r&248)<<8 | (g&252)<<3 | (b&248)>>3);
+}
+
+word TFT::RGBtoWORD(color c)
+{
+	return ((c.r&248)<<8 | (c.g&252)<<3 | (c.b&248)>>3);
+}
+
+// NOTE: Data lose...
+color TFT::WORDToRGB(word Color)
+{
+	color c;
+
+	c.r = (Color & 0xF800) >> 8;
+	c.g = (Color & 0x07E0) >> 3;
+	c.b = (Color & 0x1F) << 3;
+
+	return c;
+}
+
 // Font
 void TFT::PrintChar(char c, int x, int y, bool transparent)
 {

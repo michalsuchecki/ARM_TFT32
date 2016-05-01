@@ -3,25 +3,7 @@
 
 #include "common.h"
 
-// Colors
 
-#define VGA_BLACK		0x0000
-#define VGA_WHITE		0xFFFF
-#define VGA_RED			0xF800
-#define VGA_GREEN		0x0400
-#define VGA_BLUE		0x001F
-#define VGA_SILVER		0xC618
-#define VGA_GRAY		0x8410
-#define VGA_MAROON		0x8000
-#define VGA_YELLOW		0xFFE0
-#define VGA_OLIVE		0x8400
-#define VGA_LIME		0x07E0
-#define VGA_AQUA		0x07FF
-#define VGA_TEAL		0x0410
-#define VGA_NAVY		0x0010
-#define VGA_FUCHSIA		0xF81F
-#define VGA_PURPLE		0x8010
-#define VGA_TRANSPARENT	0xFFFFFFFF
 
 // STRUCT
 
@@ -65,6 +47,10 @@ public:
 
 	int	GetDisplayXSize();
 	int	GetDisplayYSize();
+
+	static word RGBtoWORD(uint8_t r, uint8_t g, uint8_t b);
+	static word RGBtoWORD(color c);
+	static color WORDToRGB(word Color);
 
 	// Font
 	void PrintText(char* string, int x=0, int y=0, bool transparent = true);

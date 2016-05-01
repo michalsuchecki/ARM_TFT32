@@ -1,17 +1,11 @@
 #include "ui.h"
 
-UI::UI(TFT* NewDisplay)
+UI::UI(TFT* NewDisplay, Touch* NewTouch)
 {
+	OnTouch = NULL;
 	Display = NewDisplay;
+	Sensor = NewTouch;
 	elementCount = 0;
-}
-
-void UI::Update()
-{
-	// INFO: Wystarczy redraw ?
-	for(int i = 0; i < MAXELEMENT; i ++)
-	{
-	}
 }
 
 void UI::Draw()
@@ -25,6 +19,42 @@ void UI::Draw()
 	}
 }
 
+void UI::Update(uint16_t deltaTime)
+{
+	if(Sensor->ProcessTouch(deltaTime))
+	{
+		word x = Sensor->GetX();
+		word y = Sensor->GetY();
+
+		for(uint8_t i = 0; i < elementCount; i++)
+		{
+			if(Elements[i] != NULL)  // Potrzebne ?
+			{
+				if(Elements[i]->IsOnElement(x,y))
+				{
+					Elements[i]->bTouched = true;
+				}
+				else
+				{
+					Elements[i]->bTouched = false;
+				}
+				Elements[i]->bRedraw = true;
+			}
+		}
+
+#ifdef DEBUG
+		//Serial.print(x);
+		//Serial.print(" ");
+		//Serial.println(y);
+#endif
+
+	}
+
+	Draw();
+}
+
+//-------------------------------------------------------------------------------------------
+
 void UI::AddButton(int x, int y, int sizex, int sizey, word Color, char* text, char* newTag)
 {
 
@@ -33,6 +63,10 @@ void UI::AddButton(int x, int y, int sizex, int sizey, word Color, char* text, c
 		UIButton* newButton = new UIButton(x, y, sizex, sizey, text, Color, newTag);
 		Elements[elementCount] = newButton;
 		elementCount++;
+	}
+	else
+	{
+		Display->PrintText("Can't create button",10,200,false);
 	}
 
 }
@@ -92,11 +126,16 @@ UIElement::~UIElement()
 	// Virtualny destruktor
 }
 
-// Text
-
 void UIElement::Redraw(TFT* Display)
 {
 }
+
+bool UIElement::IsOnElement(int x, int y)
+{
+	return false;
+}
+
+// Text
 
 void UIText::Redraw(TFT* Display)
 {
@@ -121,6 +160,11 @@ UIText::~UIText()
 	free(Tag);
 }
 
+bool UIText::IsOnElement(int x, int y)
+{
+	return false;
+}
+
 // Button
 
 UIButton::UIButton(int newX, int newY, int newSizeX, int newSizeY, char* newCaption, word newColor, char* newTag)
@@ -139,7 +183,15 @@ UIButton::UIButton(int newX, int newY, int newSizeX, int newSizeY, char* newCapt
 	CapX = ((SizeX - str_x) / 2) + X;
 	CapY = ((SizeY - str_y) / 2) + Y;
 
-	BorderColor = VGA_WHITE;
+	color c = TFT::WORDToRGB(Color);
+	c.r *= BORDER_COLOR_FACTOR;
+	c.g *= BORDER_COLOR_FACTOR;
+	c.b *= BORDER_COLOR_FACTOR;
+
+	BorderColor = TFT::RGBtoWORD(c);
+
+	bRedraw = true;
+	bTouched = false;
 }
 
 UIButton::~UIButton()
@@ -150,11 +202,43 @@ UIButton::~UIButton()
 
 void UIButton::Redraw(TFT* Display)
 {
-	Display->SetColor(Color);
+	// Tlo
+	Display->SetColor(bTouched ? BorderColor : Color);
 	Display->FillRect(X,Y,SizeX-1,SizeY-1);
-	Display->SetColor(BorderColor);
+	// Ramka
+	Display->SetColor(bTouched ? VGA_WHITE : BorderColor);
 	Display->DrawRect(X,Y,SizeX,SizeY);
+	// Tekst
 	Display->SetColor(VGA_WHITE);
 	Display->PrintText(Caption,CapX, CapY);
 	bRedraw = false;
+}
+
+
+bool UIButton::IsOnElement(int x, int y)
+{
+
+#ifdef DEBUG
+		Serial.print("Touch at: ");
+		Serial.print(x);
+		Serial.print(" ");
+		Serial.print(y);
+
+		Serial.print(" Element: ");
+		Serial.print(X);
+		Serial.print(" ");
+		Serial.println(Y);
+
+#endif
+	if((x >= X && x <= (X + SizeX))
+	&& (y >= Y && y <= (Y + SizeY)))
+	{
+		Serial.println(" OnElement!");
+		return true;
+	}
+	else
+	{
+		Serial.println("");
+		return false;
+	}
 }

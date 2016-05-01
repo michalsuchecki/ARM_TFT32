@@ -6,6 +6,8 @@ Touch::Touch()
 	y = 0;
 	delta = 0;
 
+	OnTouch = NULL;
+
 	State = T_Untouched;
 
 	P_CLK	= portOutputRegister(digitalPinToPort(T_CLK));
