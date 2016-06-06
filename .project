@@ -32,14 +32,38 @@
 	</natures>
 	<linkedResources>
 		<link>
+			<name>arduino/core</name>
+			<type>2</type>
+			<locationURI>ArduinoPlatformPath/arduino</locationURI>
+		</link>
+		<link>
+			<name>arduino/variant</name>
+			<type>2</type>
+			<locationURI>ArduinoPinPath/arduino_due_x</locationURI>
+		</link>
+		<link>
 			<name>core/core</name>
 			<type>2</type>
-			<location>C:/Program Files (x86)/Eclipse/cpp-mars/eclipse/arduinoPlugin/packages/arduino/hardware/sam/1.6.7/cores/arduino</location>
+			<location>C:/Users/Haru/eclipse/cpp-mars/eclipse/arduinoPlugin/packages/arduino/hardware/sam/1.6.8/cores/arduino</location>
 		</link>
 		<link>
 			<name>core/variant</name>
 			<type>2</type>
-			<location>C:/Program Files (x86)/Eclipse/cpp-mars/eclipse/arduinoPlugin/packages/arduino/hardware/sam/1.6.7/variants/arduino_due_x</location>
+			<location>C:/Users/Haru/eclipse/cpp-mars/eclipse/arduinoPlugin/packages/arduino/hardware/sam/1.6.8/variants/arduino_due_x</location>
 		</link>
 	</linkedResources>
+	<variableList>
+		<variable>
+			<name>ArduinoHardwareLibPath</name>
+			<value>file:/C:/Users/Haru/AppData/Roaming/Arduino15/packages/arduino/hardware/sam/1.6.5/libraries</value>
+		</variable>
+		<variable>
+			<name>ArduinoPinPath</name>
+			<value>file:/C:/Users/Haru/AppData/Roaming/Arduino15/packages/arduino/hardware/sam/1.6.5/variants</value>
+		</variable>
+		<variable>
+			<name>ArduinoPlatformPath</name>
+			<value>file:/C:/Users/Haru/AppData/Roaming/Arduino15/packages/arduino/hardware/sam/1.6.5/cores</value>
+		</variable>
+	</variableList>
 </projectDescription>
