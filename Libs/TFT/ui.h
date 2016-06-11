@@ -14,6 +14,8 @@ enum UIElementType
 	UI_Graph
 };
 
+extern const char* labels[];
+
 class UIElement
 {
 public:

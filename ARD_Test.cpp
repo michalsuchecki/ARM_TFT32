@@ -9,6 +9,15 @@ MAX31855 thermo = MAX31855();
 bool test = false;
 unsigned long last_ms_time;
 
+
+
+//PROGMEM
+const char* labels[] =
+{
+	"OK",
+	"CANCEL",
+};
+
 void OnTouch(int x, int y, TouchState State, char* Tag)
 {
 

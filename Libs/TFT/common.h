@@ -42,6 +42,9 @@
 	#define RST 33
 #endif
 
+#define pgm_read_word(data) *data
+#define pgm_read_byte(data) *data
+
 #define LEFT 0
 #define RIGHT 9999
 #define CENTER 9998
