@@ -9,13 +9,12 @@ MAX31855 thermo = MAX31855();
 bool test = false;
 unsigned long last_ms_time;
 
-
-
 //PROGMEM
 const char* labels[] =
 {
 	"OK",
 	"CANCEL",
+	"Press Me"
 };
 
 void OnTouch(int x, int y, TouchState State, char* Tag)
@@ -138,7 +137,8 @@ void setup()
 
 	Interface.OnTouch = OnTouch;
 
-	Interface.AddButton(10,90,100,25, VGA_NAVY, "Press LOL", "BT1");
+	Interface.AddText(10,60, VGA_GREEN, 1, 2);
+	Interface.AddButton(10,90,100,25, VGA_NAVY,2,1);
 
 	last_ms_time = millis();
 }
@@ -157,10 +157,10 @@ void loop()
 
 	Debug("DeltaTime [ms]: ", delta_time, 10, 10);
 
-	result = dtostrf(thermo.ReadCelsiusTemp(), 1);
-	Debug("Temp(C): ", result, 10, 20);
-	result = dtostrf(thermo.ReadInternalTemp(), 1);
-	Debug("Temp(int): ", result, 10, 30);
+	//result = dtostrf(thermo.ReadCelsiusTemp(), 1);
+	//Debug("Temp(C): ", result, 10, 20);
+	//result = dtostrf(thermo.ReadInternalTemp(), 1);
+	//Debug("Temp(int): ", result, 10, 30);
 
 	/*
     if (touch.ProcessTouch(delta_time))
@@ -173,5 +173,5 @@ void loop()
 	//Interface.Draw();
 
     Interface.Update(delta_time);
-    delay(100);
+    //delay(100);
 }

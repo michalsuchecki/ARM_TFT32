@@ -54,39 +54,30 @@ void UI::Update(uint16_t deltaTime)
 }
 
 //-------------------------------------------------------------------------------------------
-
-void UI::AddButton(int x, int y, int sizex, int sizey, word Color, char* text, char* newTag)
-{
-
-	if(elementCount < MAXELEMENT)
-	{
-		UIButton* newButton = new UIButton(x, y, sizex, sizey, text, Color, newTag);
-		Elements[elementCount] = newButton;
-		elementCount++;
-	}
-	else
-	{
-		Display->PrintText("Can't create button",10,200,false);
-	}
-
-}
-
-void UI::AddText(int x, int y, word Color, char* Caption, char* Tag)
+void UI::AddButton(int x, int y, int sizex, int sizey, word Color, uint8_t capId, uint8_t TagId)
 {
 	if(elementCount < MAXELEMENT)
 	{
-		UIText* newCaption = new UIText(x, y, Caption, Color, Tag);
-		Elements[elementCount] = newCaption;
-		elementCount++;
+		UIButton* newButton = new UIButton(x,y, sizex, sizey, capId, Color, TagId);
+		Elements[elementCount++] = newButton;
 	}
 }
 
-void UI::RemoveElement(char* Tag)
+void UI::AddText(int x, int y, word Color, uint8_t CapId, uint8_t TagId)
+{
+	if(elementCount < MAXELEMENT)
+	{
+		UIText* newCaption = new UIText(x, y, CapId, Color, TagId);
+		Elements[elementCount++] = newCaption;
+	}
+}
+
+void UI::RemoveElement(uint8_t Tag)
 {
 	int i, idx = -1;
 	for(i = 0; i < MAXELEMENT; i++)
 	{
-		if(Elements[i] != NULL && strcmp(Elements[i]->Tag, Tag) == 0)
+		if(Elements[i] != NULL && Elements[i]->TagId == Tag)
 		{
 			idx = i;
 			elementCount--;
@@ -116,7 +107,7 @@ void UI::Debug(int x, int y, int value)
 	char msg[32];
 	itoa(value,msg,10);
 	Display->SetColor(VGA_YELLOW);
-	Display->PrintText(msg,x,y);
+	//Display->PrintText(msg,x,y);
 }
 
 //-----------------------------------------------------------
@@ -140,24 +131,24 @@ bool UIElement::IsOnElement(int x, int y)
 void UIText::Redraw(TFT* Display)
 {
 	Display->SetColor(Color);
-	Display->PrintText(caption,X,Y);
+	Display->PrintText(labels[CaptionId],X,Y);
 	bRedraw=false;
 }
 
-UIText::UIText(int newX, int newY, char* newCaption, word newColor, char* newTag)
+UIText::UIText(int newX, int newY, uint8_t newCapId, word newColor, uint8_t newTag)
 {
-	Tag = newTag;
 	Color = newColor;
 	X = newX;
 	Y = newY;
-	caption = newCaption;
+
+	TagId = newTag;
+	CaptionId = newCapId;
+
 	bRedraw = true;
 }
 
 UIText::~UIText()
 {
-	free(caption);
-	free(Tag);
 }
 
 bool UIText::IsOnElement(int x, int y)
@@ -167,17 +158,20 @@ bool UIText::IsOnElement(int x, int y)
 
 // Button
 
-UIButton::UIButton(int newX, int newY, int newSizeX, int newSizeY, char* newCaption, word newColor, char* newTag)
+
+UIButton::UIButton(int newX, int newY, int newSizeX, int newSizeY, uint8_t newCapId, word newColor, uint8_t newTag)
 {
 	X = newX;
 	Y = newY;
 	SizeX = newSizeX;
 	SizeY = newSizeY;
-	Caption = newCaption;
+	//Caption = newCaption;
 	Color = newColor;
-	Tag = newTag;
+	//Tag = newTag;
 
-	int str_x = strlen(newCaption) * 8;
+	TagId = newTag;
+	CaptionId = newCapId;
+	int str_x = strlen(labels[CaptionId]) * 8;
 	int str_y = 8;
 
 	CapX = ((SizeX - str_x) / 2) + X;
@@ -196,8 +190,6 @@ UIButton::UIButton(int newX, int newY, int newSizeX, int newSizeY, char* newCapt
 
 UIButton::~UIButton()
 {
-	free(Caption);
-	free(Tag);
 }
 
 void UIButton::Redraw(TFT* Display)
@@ -210,7 +202,7 @@ void UIButton::Redraw(TFT* Display)
 	Display->DrawRect(X,Y,SizeX,SizeY);
 	// Tekst
 	Display->SetColor(VGA_WHITE);
-	Display->PrintText(Caption,CapX, CapY);
+	Display->PrintText(labels[CaptionId],CapX, CapY);
 	bRedraw = false;
 }
 

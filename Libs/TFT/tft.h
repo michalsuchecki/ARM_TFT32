@@ -53,7 +53,8 @@ public:
 	static color WORDToRGB(word Color);
 
 	// Font
-	void PrintText(char* string, int x=0, int y=0, bool transparent = true);
+	//void PrintText(char* string, int x=0, int y=0, bool transparent = true);
+	void PrintText(const char* caption, int x=0, int y=0, bool transparent = true);
 	void PrintChar(char c, int x=0, int y=0, bool transparent = true);
 	void SetFont(const byte* newFont);
 	uint8_t GetFontSizeX();

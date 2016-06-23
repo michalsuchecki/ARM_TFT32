@@ -19,7 +19,6 @@ extern const char* labels[];
 class UIElement
 {
 public:
-	char* Tag;	// ID
 	int X,Y;
 	word Color;
 
@@ -27,6 +26,9 @@ public:
 	// Status
 	bool bRedraw : 1;
 	bool bTouched: 1;	// bActive ?
+
+	uint8_t TagId;
+	uint8_t CaptionId;
 
 
 	void virtual Redraw(TFT* Display);
@@ -38,8 +40,7 @@ public:
 class UIText : public UIElement
 {
 public:
-	char* caption;
-	UIText(int newX, int newY, char* newCaption, word newColor, char* newTag);
+	UIText(int newX, int newY, uint8_t newCapId, word newColor, uint8_t newTag);
 	~UIText();
 	void Redraw(TFT* Display);
 	bool IsOnElement(int x, int y);
@@ -49,12 +50,11 @@ class UIButton : public UIElement
 {
 private:
 	word BorderColor;
-	char* Caption;
 	uint16_t SizeX, SizeY;
 	uint16_t CapX, CapY;
 
 public:
-	UIButton(int newX, int newY, int newSizeX, int newSizeY, char* newCaption, word newColor, char* newTag);
+	UIButton(int newX, int newY, int newSizeX, int newSizeY, uint8_t newCapId, word newColor, uint8_t newTag);
 	~UIButton();
 	void Redraw(TFT* Display);
 	bool IsOnElement(int x, int y);
@@ -66,9 +66,9 @@ public:
 	UI(TFT* NewDisplay, Touch* NewTouch);
 	void Draw();
 public:
-	void AddButton(int x, int y, int sizex, int sizey, word Color, char* text, char* newTag);
-	void AddText(int x, int y, word Color, char* Caption, char* Tag);
-	void RemoveElement(char* Tag);
+	void AddButton(int x, int y, int sizex, int sizey, word Color, uint8_t capId, uint8_t TagId);
+	void AddText(int x, int y, word Color, uint8_t CapId, uint8_t TagId);
+	void RemoveElement(uint8_t Tag);
 	int  ElementsCount();
 	void Update(uint16_t deltaTime);
 	void (*OnTouch)(int x, int y, TouchState State, char* Tag);

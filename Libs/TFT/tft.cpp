@@ -364,12 +364,14 @@ void TFT::PrintChar(char c, int x, int y, bool transparent)
 	ClearXY();
 }
 
-void TFT::PrintText(char* string, int x, int y, bool transparent)
+void TFT::PrintText(const char* caption, int x, int y, bool transparent)
 {
-	int str_len = strlen(string);
+	uint8_t str_len = strlen(caption);
 
-	for (int i=0; i<str_len; i++)
-		PrintChar(*string++, x + (i*(Font.x_size)), y, transparent);
+	for(uint8_t i = 0; i < str_len; i++)
+	{
+		PrintChar(*caption++, x + (i*(Font.x_size)), y, transparent);
+	}
 }
 
 void TFT::SetFont(const byte* newFont)
