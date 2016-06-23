@@ -137,6 +137,8 @@ void setup()
 
 	Interface.OnTouch = OnTouch;
 
+
+
 	Interface.AddText(10,60, VGA_GREEN, 1, 2);
 	Interface.AddButton(10,90,100,25, VGA_NAVY,2,1);
 
@@ -156,6 +158,8 @@ void loop()
 	char* result;
 
 	Debug("DeltaTime [ms]: ", delta_time, 10, 10);
+
+	Debug("StructSize: ", sizeof(SElement), 10, 30);
 
 	//result = dtostrf(thermo.ReadCelsiusTemp(), 1);
 	//Debug("Temp(C): ", result, 10, 20);

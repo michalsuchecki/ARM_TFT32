@@ -8,6 +8,7 @@
 
 enum UIElementType
 {
+	UI_None,
 	UI_Background,
 	UI_Button,
 	UI_Text,
@@ -16,48 +17,21 @@ enum UIElementType
 
 extern const char* labels[];
 
-class UIElement
+struct SElement
 {
-public:
-	int X,Y;
-	word Color;
-
-	//UIElementType Type;
-	// Status
-	bool bRedraw : 1;
-	bool bTouched: 1;	// bActive ?
-
 	uint8_t TagId;
 	uint8_t CaptionId;
 
+	UIElementType Type;
 
-	void virtual Redraw(TFT* Display);
-	virtual ~UIElement();
+	word ColorPrimary;
+	word ColorSecondary;
 
-	bool virtual IsOnElement(int x, int y);
-};
+	uint16_t X,Y;
+	uint16_t SizeX,SizeY;
 
-class UIText : public UIElement
-{
-public:
-	UIText(int newX, int newY, uint8_t newCapId, word newColor, uint8_t newTag);
-	~UIText();
-	void Redraw(TFT* Display);
-	bool IsOnElement(int x, int y);
-};
-
-class UIButton : public UIElement
-{
-private:
-	word BorderColor;
-	uint16_t SizeX, SizeY;
-	uint16_t CapX, CapY;
-
-public:
-	UIButton(int newX, int newY, int newSizeX, int newSizeY, uint8_t newCapId, word newColor, uint8_t newTag);
-	~UIButton();
-	void Redraw(TFT* Display);
-	bool IsOnElement(int x, int y);
+	bool bRedraw : 1;
+	bool bTouched: 1;
 };
 
 class UI
@@ -77,7 +51,7 @@ public:
 private:
 	TFT* Display;
 	Touch* Sensor;
-	UIElement* Elements[10];
+	SElement Elements[MAXELEMENT];
 	uint8_t elementCount;
 };
 
