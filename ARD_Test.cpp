@@ -138,9 +138,11 @@ void setup()
 	Interface.OnTouch = OnTouch;
 
 
-
+	Interface.AddBackground(0,0,319,50, VGA_GRAY);
 	Interface.AddText(10,60, VGA_GREEN, 1, 2);
 	Interface.AddButton(10,90,100,25, VGA_NAVY,2,1);
+
+
 
 	last_ms_time = millis();
 }

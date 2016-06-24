@@ -19,7 +19,9 @@ void UI::Draw()
 		switch(current.Type)
 		{
 		case UI_Background:
-			// TODO
+			Display->SetColor(current.ColorPrimary);
+			Display->FillRect(current.X,current.Y,current.SizeX,current.SizeY);
+			Elements[i].bRedraw = false;
 			break;
 		case UI_Button:
 			// Tlo
@@ -36,7 +38,7 @@ void UI::Draw()
 		break;
 		case UI_Text:
 			Display->SetColor(current.ColorPrimary);
-			Display->PrintText(labels[current.CaptionId],current.X,current.Y);
+			Display->PrintText(labels[current.CaptionId],current.X,current.Y,true);
 
 			Elements[i].bRedraw = false;
 			break;
@@ -84,22 +86,42 @@ void UI::Update(uint16_t deltaTime)
 }
 
 //-------------------------------------------------------------------------------------------
+
+void UI::AddBackground(int x, int y, int sizex, int sizey, word Color)
+{
+	SElement element;
+
+	element.Type = UI_Background;
+
+	element.ColorPrimary = Color;
+
+	element.X = x;
+	element.Y = y;
+	element.SizeX = sizex;
+	element.SizeY = sizey;
+
+	element.bRedraw = true;
+	element.bTouched = false;
+
+	Elements[elementCount++] = element;
+}
+
 void UI::AddButton(int x, int y, int sizex, int sizey, word Color, uint8_t capId, uint8_t TagId)
 {
 	if(elementCount < MAXELEMENT)
 	{
-		SElement newButton;
+		SElement element;
 
-		newButton.Type = UI_Button;
-		newButton.CaptionId = capId;
-		newButton.TagId = TagId;
+		element.Type = UI_Button;
+		element.CaptionId = capId;
+		element.TagId = TagId;
 
-		newButton.ColorPrimary = Color;
+		element.ColorPrimary = Color;
 
-		newButton.X = x;
-		newButton.Y = y;
-		newButton.SizeX = sizex;
-		newButton.SizeY = sizey;
+		element.X = x;
+		element.Y = y;
+		element.SizeX = sizex;
+		element.SizeY = sizey;
 
 		color c = TFT::WORDToRGB(Color);
 
@@ -107,12 +129,12 @@ void UI::AddButton(int x, int y, int sizex, int sizey, word Color, uint8_t capId
 		c.g *= BORDER_COLOR_FACTOR;
 		c.b *= BORDER_COLOR_FACTOR;
 
-		newButton.ColorSecondary = TFT::RGBtoWORD(c);
+		element.ColorSecondary = TFT::RGBtoWORD(c);
 
-		newButton.bRedraw = true;
-		newButton.bTouched = false;
+		element.bRedraw = true;
+		element.bTouched = false;
 
-		Elements[elementCount++] = newButton;
+		Elements[elementCount++] = element;
 	}
 }
 
@@ -120,22 +142,22 @@ void UI::AddText(int x, int y, word Color, uint8_t CapId, uint8_t TagId)
 {
 	if(elementCount < MAXELEMENT)
 	{
-		SElement newCaption;
+		SElement element;
 
-		newCaption.Type = UI_Text;
-		newCaption.CaptionId = CapId;
-		newCaption.TagId = TagId;
+		element.Type = UI_Text;
+		element.CaptionId = CapId;
+		element.TagId = TagId;
 
-		newCaption.ColorPrimary = Color;
-		newCaption.ColorSecondary = VGA_WHITE;
+		element.ColorPrimary = Color;
+		element.ColorSecondary = VGA_WHITE;
 
-		newCaption.X = x;
-		newCaption.Y = y;
+		element.X = x;
+		element.Y = y;
 
-		newCaption.bRedraw = true;
-		newCaption.bTouched = false;
+		element.bRedraw = true;
+		element.bTouched = false;
 
-		Elements[elementCount++] = newCaption;
+		Elements[elementCount++] = element;
 	}
 }
 

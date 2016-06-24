@@ -12,6 +12,7 @@ enum UIElementType
 	UI_Background,
 	UI_Button,
 	UI_Text,
+	UI_ProgressBar,
 	UI_Graph
 };
 
@@ -32,6 +33,7 @@ struct SElement
 
 	bool bRedraw : 1;
 	bool bTouched: 1;
+	bool bTransparent: 1;
 };
 
 class UI
@@ -40,6 +42,7 @@ public:
 	UI(TFT* NewDisplay, Touch* NewTouch);
 	void Draw();
 public:
+	void AddBackground(int x, int y, int sizex, int sizey, word Color);
 	void AddButton(int x, int y, int sizex, int sizey, word Color, uint8_t capId, uint8_t TagId);
 	void AddText(int x, int y, word Color, uint8_t CapId, uint8_t TagId);
 	void RemoveElement(uint8_t Tag);
