@@ -53,6 +53,27 @@ void UI::Update(uint16_t deltaTime)
 {
 	if(Sensor->ProcessTouch(deltaTime))
 	{
+		word x = Sensor->GetX();
+		word y = Sensor->GetY();
+
+		for(uint8_t i = 0; i < elementCount; i++)
+		{
+			if(Elements[i].Type == UI_Button)
+			{
+				SElement button = Elements[i];
+
+				if(x >= button.X  && x <= button.X + button.SizeX)
+				{
+					Elements[i].bTouched = true;
+					Elements[i].bRedraw = true;
+				}
+				else
+				{
+					Elements[i].bTouched = false;
+					Elements[i].bRedraw = true;
+				}
+			}
+		}
 		/*
 		word x = Sensor->GetX();
 		word y = Sensor->GetY();
@@ -75,9 +96,9 @@ void UI::Update(uint16_t deltaTime)
 		*/
 
 #ifdef DEBUG
-		//Serial.print(x);
-		//Serial.print(" ");
-		//Serial.println(y);
+		Serial.print(x);
+		Serial.print(" ");
+		Serial.println(y);
 #endif
 
 	}

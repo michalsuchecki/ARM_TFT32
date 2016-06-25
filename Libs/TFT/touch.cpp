@@ -4,6 +4,8 @@ Touch::Touch()
 {
 	x = 0;
 	y = 0;
+	rawx = 0;
+	rawy = 0;
 	delta = 0;
 
 	OnTouch = NULL;
@@ -32,10 +34,10 @@ Touch::Touch()
 	sbi(P_DIN, B_DIN);
 	sbi(P_IRQ, B_IRQ);
 
-	min_x = 222;
-	max_x = 3942;
-	min_y = 341;
-	max_y = 3853;
+	min_x = 222;	// 222
+	max_x = 3942;	//3942
+	min_y = 341;	// 341
+	max_y = 3853;	//3853
 
 	step_x = (max_x - min_x) / RX;
 	step_y = (max_y - min_y) / RY;
@@ -44,9 +46,19 @@ Touch::Touch()
 	//start_y = 0;
 }
 
+word Touch::GetRawX()
+{
+	return rawx;
+}
+
+word Touch::GetRawY()
+{
+	return rawy;
+}
+
 word Touch::GetX()
 {
-	x = x / step_x;
+	x = rawx / step_x;
 
 	// Clamp
 	if(x < 0) x = 0;
@@ -57,7 +69,7 @@ word Touch::GetX()
 
 word Touch::GetY()
 {
-	y = y / step_y;
+	y = rawy / step_y;
 
 	// Clamp
 	if(y < 0) y = 0;
@@ -160,14 +172,14 @@ void Touch::DataRead()
 	{
 		DeviceWrite(0x90);
 		pulse_high(P_CLK, B_CLK);
-		x = DeviceRead();
+		rawx = DeviceRead();
 	}
 
 	if (!rbi(P_IRQ, B_IRQ))
 	{
 		DeviceWrite(0xD0);
 		pulse_high(P_CLK, B_CLK);
-		y = DeviceRead();
+		rawy = DeviceRead();
 	}
 
 	pinMode(T_IRQ,  OUTPUT);

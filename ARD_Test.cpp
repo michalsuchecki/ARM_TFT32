@@ -139,9 +139,9 @@ void setup()
 
 
 	Interface.AddBackground(0,0,319,50, VGA_GRAY);
-	Interface.AddText(10,60, VGA_GREEN, 1, 2);
-	Interface.AddButton(10,90,100,25, VGA_NAVY,2,1);
-
+	Interface.AddText(10,60, VGA_GREEN, 1, 3);
+	Interface.AddButton(200,90,100,25, VGA_NAVY,2,1);
+	Interface.AddButton(10,90,100,25, VGA_NAVY,2,2);
 
 
 	last_ms_time = millis();
@@ -161,7 +161,8 @@ void loop()
 
 	Debug("DeltaTime [ms]: ", delta_time, 10, 10);
 
-	Debug("StructSize: ", sizeof(SElement), 10, 30);
+	Debug("X: ", touch.GetRawX(), 10, 30);
+	Debug("Y: ", touch.GetRawY(), 10, 40);
 
 	//result = dtostrf(thermo.ReadCelsiusTemp(), 1);
 	//Debug("Temp(C): ", result, 10, 20);

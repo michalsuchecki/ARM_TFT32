@@ -35,12 +35,17 @@ public:
 	TouchState GetState();
 	bool DataAvailable();
 	void (*OnTouch)(int x, int y, TouchState state);
+
+	word GetRawX();
+	word GetRawY();
+
 private:
 	void DataRead();
 	void DeviceWrite(byte data);
 	word DeviceRead();
 private:
 	word x,y;
+	word rawx,rawy;
 	uint8_t step_x, step_y;
 	//uint16_t start_x, start_y;
 	uint16_t min_x, min_y, max_x, max_y;
