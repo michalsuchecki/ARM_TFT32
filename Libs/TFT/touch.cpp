@@ -97,30 +97,7 @@ bool Touch::ProcessTouch(uint16_t delta_time)
 
 				if(OnTouch != NULL)
 					OnTouch(GetX(), GetY(), State);
-
-				//start_x = GetX();
-				//start_y = GetY();
-				//x = start_x;
-				//y = start_y;
 			}
-
-
-	/*
-			if(State != T_Moving)
-			{
-				// TODO: Add tolerance
-
-	#define TOLERANCE 5
-
-				if((start_x <= (x - TOLERANCE) && start_x >= (x + TOLERANCE))
-				|| (start_y <= (y - TOLERANCE) && start_y >= (y + TOLERANCE)))
-					State = T_Moving;
-
-				//if(start_x != x || start_y != y)
-					//State = T_Moving;
-			}
-	*/
-
 			return true;
 		}
 		else

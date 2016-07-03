@@ -6,7 +6,7 @@
 // Rozdzielczosc
 #define RESX 320
 #define RESY 240
-#define DEBUG 0
+//#define DEBUG 1
 
 // Ramka np przyciski
 #define BORDER_COLOR_FACTOR 1.8

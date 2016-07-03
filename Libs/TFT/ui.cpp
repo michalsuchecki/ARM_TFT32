@@ -77,26 +77,6 @@ void UI::Update(uint16_t deltaTime)
 				}
 			}
 		}
-		/*
-		word x = Sensor->GetX();
-		word y = Sensor->GetY();
-
-		for(uint8_t i = 0; i < elementCount; i++)
-		{
-			if(ElementsOld[i] != NULL)  // Potrzebne ?
-			{
-				if(ElementsOld[i]->IsOnElement(x,y))
-				{
-					ElementsOld[i]->bTouched = true;
-				}
-				else
-				{
-					ElementsOld[i]->bTouched = false;
-				}
-				ElementsOld[i]->bRedraw = true;
-			}
-		}
-		*/
 
 #ifdef DEBUG
 		Serial.print(x);
@@ -104,6 +84,20 @@ void UI::Update(uint16_t deltaTime)
 		Serial.println(y);
 #endif
 
+	}
+	else
+	{
+		if(Sensor->GetState() == T_Released)
+		{
+			for(uint8_t i = 0; i < elementCount; i++)
+			{
+				if(Elements[i].Type == UI_Button)
+				{
+					Elements[i].bTouched = false;
+					Elements[i].bRedraw = true;
+				}
+			}
+		}
 	}
 
 	Draw();
@@ -225,22 +219,3 @@ void UI::Debug(int x, int y, int value)
 	Display->SetColor(VGA_YELLOW);
 	Display->PrintText(msg,x,y);
 }
-
-//-----------------------------------------------------------
-
-/*
-bool UIButton::IsOnElement(int x, int y)
-{
-	if((x >= X && x <= (X + SizeX))
-	&& (y >= Y && y <= (Y + SizeY)))
-	{
-		Serial.println(" OnElement!");
-		return true;
-	}
-	else
-	{
-		Serial.println("");
-		return false;
-	}
-}
-*/
