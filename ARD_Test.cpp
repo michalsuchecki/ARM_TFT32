@@ -161,9 +161,16 @@ void loop()
 
 	Debug("DeltaTime [ms]: ", delta_time, 10, 10);
 
-	Debug("X: ", touch.GetRawX(), 10, 30);
-	Debug("Y: ", touch.GetRawY(), 10, 40);
 
+	word x = touch.GetX();
+	word y = touch.GetY();
+
+	Debug("X: ", x, 10, 30);
+	Debug("Y: ", y, 10, 40);
+	/*
+	Debug("RawX: ", touch.GetRawX(), 100, 30);
+	Debug("RawY: ", touch.GetRawY(), 100, 40);
+*/
 	//result = dtostrf(thermo.ReadCelsiusTemp(), 1);
 	//Debug("Temp(C): ", result, 10, 20);
 	//result = dtostrf(thermo.ReadInternalTemp(), 1);

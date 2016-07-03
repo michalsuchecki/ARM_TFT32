@@ -335,29 +335,6 @@ void TFT::PrintChar(char c, int x, int y, bool transparent)
 			}
 			temp+=(f8);
 		}
-		/*
-		for(j=0;j<(f8*Font.y_size);j+=f8)
-		{
-			jdev = y + (j/f8);
-			SetXY(x,jdev,x+Font.x_size-1,jdev);
-			for (int zz=(f8)-1; zz>=0; zz--)
-			{
-				ch=pgm_read_byte(&Font.font[temp+zz]);
-				for(i=0;i<8;i++)
-				{
-					if((ch&(1<<i))!=0)
-					{
-						SetPixel((fch<<8)|fcl);
-					}
-					else
-					{
-						SetPixel((bch<<8)|bcl);
-					}
-				}
-			}
-			temp+=f8;
-		}
-		*/
 	}
 
 	sbi(P_CS, B_CS);

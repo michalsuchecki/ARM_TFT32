@@ -62,7 +62,10 @@ void UI::Update(uint16_t deltaTime)
 			{
 				SElement button = Elements[i];
 
-				if(x >= button.X  && x <= button.X + button.SizeX)
+				if((x >= button.X  && x <= button.X + button.SizeX)
+				&& (y >= button.Y  && y <= button.Y + button.SizeY)
+				)
+
 				{
 					Elements[i].bTouched = true;
 					Elements[i].bRedraw = true;

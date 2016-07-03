@@ -46,9 +46,9 @@ private:
 private:
 	word x,y;
 	word rawx,rawy;
-	uint8_t step_x, step_y;
-	//uint16_t start_x, start_y;
-	uint16_t min_x, min_y, max_x, max_y;
+	uint16_t step_x, step_y;
+	uint16_t max_x, max_y;
+	//uint8_t offset_x, offset_y;
 	regtype *P_CLK, *P_CS, *P_DIN, *P_DOUT, *P_IRQ;
 	regsize B_CLK, B_CS, B_DIN, B_DOUT, B_IRQ;
 	TouchState State;

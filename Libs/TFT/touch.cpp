@@ -34,16 +34,14 @@ Touch::Touch()
 	sbi(P_DIN, B_DIN);
 	sbi(P_IRQ, B_IRQ);
 
-	min_x = 222;	// 222
 	max_x = 3942;	//3942
-	min_y = 341;	// 341
 	max_y = 3853;	//3853
 
-	step_x = (max_x - min_x) / RX;
-	step_y = (max_y - min_y) / RY;
+	step_x = ((max_x) / RX) * 10;
+	step_y = ((max_y) / RY) * 10;
 
-	//start_x = 0;
-	//start_y = 0;
+	//offset_x = step_x / 10;
+	//offset_y = step_y / 10;
 }
 
 word Touch::GetRawX()
@@ -58,7 +56,7 @@ word Touch::GetRawY()
 
 word Touch::GetX()
 {
-	x = rawx / step_x;
+	x = ((rawx * 10) / step_x) - 10;
 
 	// Clamp
 	if(x < 0) x = 0;
@@ -69,7 +67,7 @@ word Touch::GetX()
 
 word Touch::GetY()
 {
-	y = rawy / step_y;
+	y = ((rawy * 10) / step_y) - 10;
 
 	// Clamp
 	if(y < 0) y = 0;
