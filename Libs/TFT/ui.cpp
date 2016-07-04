@@ -37,6 +37,13 @@ void UI::Draw()
 			Elements[i].bRedraw = false;
 		break;
 		case UI_Text:
+			// Tlo
+			if(!current.bTransparent)
+			{
+			Display->SetColor(current.ColorSecondary);
+			Display->FillRect(current.X, current.Y, current.SizeX, current.SizeY);
+			}
+			// Tekst
 			Display->SetColor(current.ColorPrimary);
 			Display->PrintText(labels[current.CaptionId],current.X,current.Y,true);
 
@@ -156,6 +163,33 @@ void UI::AddButton(int x, int y, int sizex, int sizey, word Color, uint8_t capId
 	}
 }
 
+void UI::AddText(int x, int y, word Color, word Background, uint8_t CapId, uint8_t TagId)
+{
+	if(elementCount < MAXELEMENT)
+	{
+		SElement element;
+
+		element.Type = UI_Text;
+		element.CaptionId = CapId;
+		element.TagId = TagId;
+
+		element.ColorPrimary = Color;
+		element.ColorSecondary = Background;
+
+		element.X = x;
+		element.Y = y;
+
+		element.SizeY = Display->GetFontSizeY();
+		element.SizeX = Display->GetFontSizeX() * strlen(labels[CapId]);
+
+		element.bRedraw = true;
+		element.bTouched = false;
+		element.bTransparent = false;
+
+		Elements[elementCount++] = element;
+	}
+}
+
 void UI::AddText(int x, int y, word Color, uint8_t CapId, uint8_t TagId)
 {
 	if(elementCount < MAXELEMENT)
@@ -167,13 +201,13 @@ void UI::AddText(int x, int y, word Color, uint8_t CapId, uint8_t TagId)
 		element.TagId = TagId;
 
 		element.ColorPrimary = Color;
-		element.ColorSecondary = VGA_WHITE;
 
 		element.X = x;
 		element.Y = y;
 
 		element.bRedraw = true;
 		element.bTouched = false;
+		element.bTransparent = true;
 
 		Elements[elementCount++] = element;
 	}

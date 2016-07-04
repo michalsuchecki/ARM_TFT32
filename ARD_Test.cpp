@@ -139,10 +139,10 @@ void setup()
 
 
 	Interface.AddBackground(0,0,319,50, VGA_GRAY);
-	Interface.AddText(10,60, VGA_GREEN, 1, 3);
+	Interface.AddText(10,60, VGA_GREEN, VGA_RED, 1, 3);
+	Interface.AddText(100,60, VGA_GREEN, 1, 3);
 	Interface.AddButton(200,90,100,25, VGA_NAVY,2,1);
 	Interface.AddButton(10,90,100,25, VGA_NAVY,2,2);
-
 
 	last_ms_time = millis();
 }

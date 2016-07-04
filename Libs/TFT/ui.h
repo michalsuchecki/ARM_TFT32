@@ -44,6 +44,7 @@ public:
 public:
 	void AddBackground(int x, int y, int sizex, int sizey, word Color);
 	void AddButton(int x, int y, int sizex, int sizey, word Color, uint8_t capId, uint8_t TagId);
+	void AddText(int x, int y, word Color, word Background, uint8_t CapId, uint8_t TagId);
 	void AddText(int x, int y, word Color, uint8_t CapId, uint8_t TagId);
 	void RemoveElement(uint8_t Tag);
 	int  ElementsCount();
