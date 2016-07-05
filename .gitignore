@@ -1,2 +1,4 @@
 [rR]elease
-/.settings/*
+.cproject
+.project
+.settings/
